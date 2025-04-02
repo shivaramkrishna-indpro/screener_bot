@@ -20,14 +20,6 @@ URL = f"https://www.google.com/finance/quote/{TICKER}"
 # Function to Fetch Stock Price
 def fetch_stock_price():
     try:
-        now = datetime.now()
-        market_open = now.replace(hour=9, minute=15, second=0, microsecond=0)
-        market_close = now.replace(hour=10, minute=30, second=0, microsecond=0)
-
-        if now < market_open or now > market_close:
-            print("Market is closed. Waiting for 9:15 AM...")
-            return {"message": "Market is closed. Data fetching will resume at 9:15 AM."}
-
         proxy_url = f"https://api.scraperapi.com?api_key={API_KEY}&url={URL}"
         response = requests.get(proxy_url)
         
@@ -70,19 +62,11 @@ def send_telegram_alert(price):
 def get_price():
     return jsonify(fetch_stock_price())
 
-# Function to Run the Scraper Only During Market Hours
+# Function to Run the Scraper Continuously
 def run_scraper():
     while True:
-        now = datetime.now()
-        market_open = now.replace(hour=9, minute=15, second=0, microsecond=0)
-        market_close = now.replace(hour=10, minute=30, second=0, microsecond=0)
-
-        if market_open <= now <= market_close:
-            fetch_stock_price()
-            time.sleep(5)  # Fetch price every 5 seconds
-        else:
-            print("Market closed. Waiting for the next trading session...")
-            time.sleep(60)  # Check every 1 minute when outside market hours
+        fetch_stock_price()
+        time.sleep(5)  # Fetch price every 5 seconds
 
 # Start background thread
 threading.Thread(target=run_scraper, daemon=True).start()

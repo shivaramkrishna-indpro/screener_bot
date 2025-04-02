@@ -14,7 +14,7 @@ TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")  # Set this in Render
 CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")  # Set this in Render
 
 # Google Finance URL
-TICKER = "BTC-USD"
+TICKER = "NIFTY_50:INDEXNSE"
 URL = f"https://www.google.com/finance/quote/{TICKER}"
 
 # Function to Fetch Stock Price
